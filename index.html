@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vokabel-Extraktions-Tool - Universal</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <title>TicTacToe Generator - Datenschutzkonform</title>
     <style>
         * {
             margin: 0;
@@ -14,1536 +11,728 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f3f4f6;
+            line-height: 1.5;
         }
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
+            padding: 2rem;
         }
-        .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 300;
-        }
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-        .step-indicator {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            background: #f8f9fa;
-            border-bottom: 1px solid #e9ecef;
-        }
-        .step {
-            display: flex;
-            align-items: center;
-            color: #6c757d;
-            font-weight: 500;
-            margin: 0 15px;
-        }
-        .step.active {
-            color: #007bff;
-        }
-        .step-number {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: #e9ecef;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 8px;
+        h1 {
+            font-size: 1.875rem;
             font-weight: bold;
-        }
-        .step.active .step-number {
-            background: #007bff;
-            color: white;
-        }
-        .main-content {
-            padding: 30px;
-            min-height: 400px;
-        }
-        .section {
-            display: none;
-        }
-        .section.active {
-            display: block;
-        }
-        .file-upload {
-            border: 3px dashed #007bff;
-            border-radius: 15px;
-            padding: 60px 40px;
             text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: #f8f9ff;
+            margin-bottom: 2rem;
         }
-        .file-upload:hover, .file-upload.dragover {
-            border-color: #0056b3;
-            background: #e3f2fd;
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
         }
-        .file-upload h3 {
-            color: #007bff;
-            margin-bottom: 10px;
+        @media (max-width: 1024px) {
+            .grid-layout {
+                grid-template-columns: 1fr;
+            }
         }
-        .file-upload p {
-            color: #6c757d;
-            margin-bottom: 20px;
-        }
-        .file-input {
-            display: none;
-        }
-        .btn {
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-            color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            margin: 5px;
-        }
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,123,255,0.3);
-        }
-        .btn-secondary {
-            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-        }
-        .btn-success {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-        }
-        .card {
+        .panel {
             background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            border: 1px solid #e9ecef;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
-        .card h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 1.3em;
+        .panel h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
         }
-        .progress-bar {
-            background: #e9ecef;
-            border-radius: 10px;
-            height: 8px;
-            overflow: hidden;
-            margin: 15px 0;
+        .settings-panel {
+            max-height: 90vh;
+            overflow-y: auto;
         }
-        .progress-fill {
-            background: linear-gradient(90deg, #007bff, #0056b3);
-            height: 100%;
-            border-radius: 10px;
-            transition: width 0.3s ease;
+        .preview-panel {
+            max-height: 90vh;
+            overflow-y: auto;
         }
-        .page-selection {
-            margin: 20px 0;
+        .form-group {
+            margin-bottom: 1.5rem;
         }
-        .page-selection label {
+        .form-group label {
             display: block;
-            margin: 10px 0;
-            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
         }
-        .page-selection input[type="radio"] {
-            margin-right: 10px;
-        }
-        .page-selection input[type="text"] {
-            margin-left: 20px;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            display: none;
-        }
-        .words-table {
+        .form-group input[type="text"],
+        .form-group select,
+        .form-group textarea {
             width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
+            padding: 0.5rem 0.75rem;
+            border: 2px solid #d1d5db;
+            border-radius: 0.25rem;
+            font-size: 1rem;
         }
-        .words-table th,
-        .words-table td {
-            border: 1px solid #ddd;
-            padding: 8px 12px;
-            text-align: left;
-            vertical-align: middle;
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
         }
-        .words-table th {
-            background: #f8f9fa;
+        .hint-text {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+        .task-editor {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.25rem;
+        }
+        .task-editor h4 {
+            font-weight: bold;
+            margin-bottom: 0.75rem;
+        }
+        .task-field {
+            margin-bottom: 0.75rem;
+        }
+        .task-field label {
+            display: block;
+            font-size: 0.875rem;
             font-weight: 600;
-            color: #2c3e50;
+            margin-bottom: 0.25rem;
         }
-        .words-table tr:nth-child(even) {
-            background: #f8f9fa;
-        }
-        .word-input,
-        .word-textarea,
-        .dropdown {
+        .task-field input,
+        .task-field textarea {
             width: 100%;
-            padding-top: 8px !important;
-            padding-bottom: 8px !important;
-            padding-left: 8px;
-            padding-right: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-            line-height: 1.4;
-            vertical-align: middle;
+            padding: 0.375rem 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
         }
-        .word-textarea {
-            resize: vertical;
-            min-height: 60px;
-            padding-top: 10px !important;
+        .task-field input:disabled {
+            background-color: #f3f4f6;
         }
-        .dropdown {
-            height: auto;
-            min-height: 40px;
+        .task-field input.emoji-input {
+            font-size: 1.5rem;
         }
-        .delete-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
+        .material-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+        .material-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
             cursor: pointer;
-            font-size: 16px;
         }
-        .delete-btn:hover {
-            background: #c82333;
+        .material-option input[type="checkbox"] {
+            width: 1rem;
+            height: 1rem;
         }
-        .word-count {
-            background: #007bff;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 15px;
-            font-weight: bold;
-            margin-left: 10px;
+        .material-option .emoji {
+            font-size: 1.25rem;
         }
-        .ai-prompt-container {
-            background: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            max-height: 400px;
-            overflow-y: auto;
+        .material-option .name {
+            font-size: 0.875rem;
         }
-        .ai-prompt {
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.4;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-        .ai-response {
+        .print-button {
             width: 100%;
-            height: 300px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            resize: vertical;
+            background-color: #2563eb;
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 1rem;
         }
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border: 1px solid #f5c6cb;
+        .print-button:hover {
+            background-color: #1d4ed8;
         }
-        .success {
-            background: #d4edda;
-            color: #155724;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border: 1px solid #c3e6cb;
+        .ai-button {
+            width: 100%;
+            background-color: #7c3aed;
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 0.5rem;
         }
-        .hidden {
-            display: none !important;
+        .ai-button:hover {
+            background-color: #6d28d9;
         }
-        .text-center {
+        .success-button {
+            background-color: #10b981;
+        }
+        .success-button:hover {
+            background-color: #059669;
+        }
+        .ki-section {
+            background-color: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .ki-section h3 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #7c3aed;
+        }
+        .preview-container {
+            transform: scale(0.6);
+            transform-origin: top left;
+            width: 167%;
+        }
+        /* A4 Page Styles */
+        .a4-page {
+            width: 210mm;
+            height: 297mm;
+            background: white;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 10mm;
+            display: flex;
+            flex-direction: column;
+        }
+        .a4-page h1 {
+            font-size: 1.5rem;
             text-align: center;
+            margin-bottom: 0.75rem;
         }
-        .mt-3 {
-            margin-top: 20px;
+        .tictactoe-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            flex: 1;
+            gap: 0;
         }
-        .debug-section {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
+        .tictactoe-cell {
+            border: 2px solid black;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
         }
-        .debug-content {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-            white-space: pre-wrap;
-            max-height: 400px;
-            overflow-y: auto;
+        .cell-content {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .tooltip {
-            position: relative;
-            display: inline-block;
-            cursor: help;
+        .category-badge {
+            padding: 0.125rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: black;
+            margin-bottom: 0.25rem;
         }
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 200px;
-            background-color: #555;
-            color: #fff;
+        .category-badge.bg-white {
+            background-color: white;
+            border: 1px solid #e5e7eb;
+        }
+        .category-badge.bg-green {
+            background-color: #4ade80;
+        }
+        .cell-emoji {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+        .cell-title {
+            background-color: #e5e7eb;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
             text-align: center;
-            border-radius: 6px;
-            padding: 5px 0;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -100px;
-            opacity: 0;
-            transition: opacity 0.3s;
+            font-weight: bold;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
         }
-        .tooltip .tooltiptext::after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #555 transparent transparent transparent;
+        .cell-description {
+            font-size: 0.75rem;
+            text-align: center;
+            white-space: pre-line;
+            padding: 0 0.25rem;
+            line-height: 1.2;
         }
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
+        .cell-materials {
+            margin-top: 0.25rem;
+            font-size: 1rem;
         }
         .footer {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            color: #ecf0f1;
-            padding: 40px 20px 20px;
-            margin-top: 40px;
-        }
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-        .footer-section h4 {
-            color: #3498db;
-            margin-bottom: 15px;
-            font-size: 1.1em;
-        }
-        .footer-section p {
-            font-size: 0.9em;
-            line-height: 1.6;
-            color: #bdc3c7;
-        }
-        .footer-bottom {
-            border-top: 1px solid #34495e;
-            padding-top: 20px;
+            margin-top: 0.5rem;
             text-align: center;
-            color: #95a5a6;
-            font-size: 0.85em;
+            font-size: 0.75rem;
+            color: #6b7280;
         }
-        .target-group-section {
-            background: #e3f2fd;
-            border: 2px solid #2196f3;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 25px;
+        .footer p {
+            margin-bottom: 0.125rem;
         }
-        .target-group-section h4 {
-            color: #1976d2;
-            margin-bottom: 15px;
-            font-size: 1.1em;
+        .footer .disclaimer {
+            font-style: italic;
         }
-        .input-group {
-            margin-bottom: 15px;
-        }
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-            color: #2c3e50;
-        }
-        .input-group input,
-        .input-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-        .input-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-        .input-group small {
-            display: block;
-            margin-top: 5px;
-            color: #6c757d;
-            font-size: 0.9em;
-        }
-        .preset-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .preset-btn {
-            padding: 8px 16px;
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-        .preset-btn:hover {
-            background: #e9ecef;
-            border-color: #007bff;
-        }
-        @media (max-width: 768px) {
-            .container {
-                margin: 10px;
-                border-radius: 10px;
+        /* Print Styles */
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
             }
-            .main-content {
-                padding: 20px;
+            .no-print {
+                display: none !important;
             }
-            .step-indicator {
-                flex-wrap: wrap;
-                gap: 10px;
+            .print-only {
+                display: block !important;
             }
-            .step {
-                margin: 5px;
+            .a4-page {
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                padding: 10mm;
+                page-break-after: always;
+                box-shadow: none;
             }
-            .words-table {
-                font-size: 12px;
+        }
+        .print-only {
+            display: none;
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #10b981;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
             }
-            .word-input,
-            .word-textarea,
-            .dropdown {
-                font-size: 12px;
-                padding: 6px;
-            }
-            .footer-content {
-                grid-template-columns: 1fr;
-                gap: 20px;
+            to {
+                transform: translateX(0);
+                opacity: 1;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🎯 Vokabel-Extraktions-Tool</h1>
-            <p>Extrahieren Sie Vokabeln aus Dokumenten und erstellen Sie personalisierte Lernlisten</p>
-        </div>
-        <div class="step-indicator">
-            <div class="step active">
-                <div class="step-number">1</div>
-                <span>Datei hochladen</span>
-            </div>
-            <div class="step">
-                <div class="step-number">2</div>
-                <span>Wörter extrahieren</span>
-            </div>
-            <div class="step">
-                <div class="step-number">3</div>
-                <span class="tooltip">Liste bearbeiten<span class="tooltiptext">Hier können Sie extrahierte Wörter bearbeiten, hinzufügen oder entfernen.</span></span>
-            </div>
-            <div class="step">
-                <div class="step-number">4</div>
-                <span class="tooltip">KI-Verbesserung<span class="tooltiptext">Generieren Sie einen Prompt, um Ihre Vokabelliste von einer KI erweitern zu lassen.</span></span>
-            </div>
-            <div class="step">
-                <div class="step-number">5</div>
-                <span class="tooltip">KI-Import<span class="tooltiptext">Fügen Sie die Antwort Ihrer KI hier ein, um die verbesserte Liste zu importieren.</span></span>
-            </div>
-            <div class="step">
-                <div class="step-number">6</div>
-                <span class="tooltip">Final Review<span class="tooltiptext">Überprüfen Sie die finalen Vokabeln vor dem Export.</span></span>
-            </div>
-            <div class="step">
-                <div class="step-number">7</div>
-                <span>Export</span>
-            </div>
-        </div>
-        <div class="main-content">
-            <div id="upload-section" class="section active">
-                <div class="card">
-                    <h3>📁 Datei hochladen</h3>
-                    <p>Laden Sie eine PDF-, Word- oder Textdatei hoch, um Vokabeln zu extrahieren. (Max. Dateigröße: 10 MB)</p>
-                    <div class="file-upload" onclick="document.getElementById('fileInput').click()">
-                        <div style="font-size: 3em; margin-bottom: 20px;">📄</div>
-                        <h3>Datei hier ablegen oder klicken zum Auswählen</h3>
-                        <p>Unterstützte Formate: PDF, DOCX, TXT</p>
-                        <input type="file" id="fileInput" class="file-input" accept=".pdf,.docx,.txt">
-                    </div>
-                    <div id="file-info" class="hidden">
-                        <p><strong>Ausgewählte Datei:</strong> <span id="file-name"></span></p>
-                        <div class="progress-bar">
-                            <div id="progress-fill" class="progress-fill" style="width: 0%"></div>
+    <div class="no-print">
+        <div class="container">
+            <h1>TicTacToe Generator - Datenschutzkonform</h1>
+            <div class="grid-layout">
+                <!-- Settings Panel -->
+                <div class="panel settings-panel">
+                    <h2>Einstellungen</h2>
+                    <!-- KI-Assistent Sektion -->
+                    <div class="ki-section">
+                        <h3>🤖 KI-Assistent</h3>
+                        <div class="form-group">
+                            <label for="aiTopic">Thema für neues TicTacToe:</label>
+                            <input type="text" id="aiTopic" placeholder="z.B. Ostern, Klimawandel, Renaissance...">
+                            <p class="hint-text">Gib ein Thema ein, für das du ein neues TicTacToe erstellen möchtest.</p>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div id="extract-section" class="section">
-                <div class="card">
-                    <h3>🔍 Wörter extrahieren</h3>
-                    <p>Wählen Sie die Seiten aus, von denen Sie Vokabeln extrahieren möchten.</p>
-                    <div class="page-selection">
-                        <label>
-                            <input type="radio" name="pageSelection" value="all" checked>
-                            Alle Seiten (Gesamt: <span id="total-pdf-pages">N/A</span>)
-                        </label>
-                        <label>
-                            <input type="radio" name="pageSelection" value="specific">
-                            Bestimmte Seiten
-                            <input type="text" id="pageRange" placeholder="z.B. 1-5, 8, 10-12" aria-label="Seitenauswahl">
-                        </label>
-                    </div>
-                    <div class="text-center mt-3">
-                        <button id="backToUploadBtn" class="btn btn-secondary">Zurück</button>
-                        <button id="extractBtn" class="btn">Wörter extrahieren</button>
-                    </div>
-                </div>
-            </div>
-            <div id="edit-list-section" class="section">
-                <div class="card">
-                    <h3>✏️ Vokabelliste bearbeiten</h3>
-                    <p>Bearbeiten Sie die extrahierten Wörter und fügen Sie weitere hinzu.</p>
-                    
-                    <!-- Zielgruppen-Konfiguration -->
-                    <div class="target-group-section">
-                        <h4>🎓 Zielgruppe festlegen</h4>
-                        <div class="input-group">
-                            <label for="targetGroup">Berufsfeld / Zielgruppe:</label>
-                            <input type="text" id="targetGroup" placeholder="z.B. Bäckerei-Fachverkauf, Bau-Berufe, Gastronomie...">
-                            <small>Geben Sie das Berufsfeld oder die Zielgruppe an, für die die Vokabeln aufbereitet werden sollen.</small>
-                            <div class="preset-buttons">
-                                <button class="preset-btn" onclick="setPreset('Bäckerei-Fachverkauf')">🥖 Bäckerei</button>
-                                <button class="preset-btn" onclick="setPreset('Bau-Berufe (Maurer, Zimmerer, Trockenbauer)')">🏗️ Bau</button>
-                                <button class="preset-btn" onclick="setPreset('Gastronomie und Hotellerie')">🍽️ Gastro</button>
-                                <button class="preset-btn" onclick="setPreset('Einzelhandel')">🛒 Handel</button>
-                                <button class="preset-btn" onclick="setPreset('Pflege und Gesundheit')">💊 Pflege</button>
-                                <button class="preset-btn" onclick="setPreset('KFZ-Technik')">🚗 KFZ</button>
-                            </div>
+                        <button class="ai-button" onclick="generateAndCopyPrompt()">
+                            📋 Prompt für KI kopieren
+                        </button>
+                        <div class="form-group" style="margin-top: 1.5rem;">
+                            <label for="aiResponse">KI-Antwort hier einfügen:</label>
+                            <textarea id="aiResponse" rows="8" placeholder="Füge hier die Markdown-Antwort der KI ein..."></textarea>
+                            <p class="hint-text">Nach dem Einfügen der KI-Antwort, klicke auf den Button unten.</p>
                         </div>
-                        <div class="input-group">
-                            <label for="contextExamples">Kontext-Beispiele (optional):</label>
-                            <textarea id="contextExamples" placeholder="z.B. Baustelle, Werkzeuge, Materialien, Arbeitssicherheit..."></textarea>
-                            <small>Geben Sie typische Begriffe oder Themen an, die in den Beispielsätzen vorkommen sollen.</small>
-                        </div>
+                        <button class="ai-button success-button" onclick="parseAIResponse()">
+                            ✨ KI-Antwort verarbeiten
+                        </button>
                     </div>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <span>Gefundene Wörter:</span>
-                        <span id="word-count" class="word-count">0</span>
-                        <button id="addWordBtn" class="btn btn-secondary" style="margin-left: 20px;">+ Wort hinzufügen</button>
+                    <div class="form-group">
+                        <label for="mainTitle">Hauptüberschrift:</label>
+                        <input type="text" id="mainTitle" value="Weihnachten 2.0">
                     </div>
-                    <div style="overflow-x: auto;">
-                        <table class="words-table" role="grid" aria-live="polite" aria-relevant="all">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Wort</th>
-                                    <th scope="col">Wortart</th>
-                                    <th scope="col">Begriffserklärung</th>
-                                    <th scope="col">Beispielsatz</th>
-                                    <th scope="col">Aktion</th>
-                                </tr>
-                            </thead>
-                            <tbody id="words-tbody"></tbody>
-                        </table>
+                    <div class="form-group">
+                        <label for="backgroundColor">Hintergrundfarbe der Felder:</label>
+                        <select id="backgroundColor">
+                            <option value="#FFC0CB">Rosa</option>
+                            <option value="#ADD8E6">Hellblau</option>
+                            <option value="#90EE90">Hellgrün</option>
+                            <option value="#FFE4B5">Pfirsich</option>
+                            <option value="#E6E6FA">Lavendel</option>
+                            <option value="#FFFACD">Zitronengelb</option>
+                            <option value="#F0E68C">Khaki</option>
+                            <option value="#DDA0DD">Pflaume</option>
+                        </select>
                     </div>
-                    <div class="text-center mt-3">
-                        <label for="targetLanguage">Zielsprache für Übersetzung:</label>
-                        <input type="text" id="targetLanguage" placeholder="z.B. Englisch, Französisch..." style="margin: 0 10px; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
-                        <button id="backToExtractBtn" class="btn btn-secondary">Zurück</button>
-                        <button id="proceedToAIExportBtn" class="btn">Weiter zur KI-Verbesserung</button>
+                    <div class="form-group">
+                        <label for="license">Lizenztext:</label>
+                        <input type="text" id="license" value="Alle Rechte vorbehalten" placeholder="z.B. Alle Rechte vorbehalten, CC BY-SA 4.0, etc.">
+                        <p class="hint-text">Wird angezeigt als: "Lizenz: <span id="licensePreview">Alle Rechte vorbehalten</span>"</p>
                     </div>
+                    <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 1rem; margin-top: 2rem;">Aufgaben bearbeiten:</h3>
+                    <div id="taskEditors"></div>
+                    <button class="print-button" onclick="window.print()">🖨️ Druckvorschau öffnen</button>
                 </div>
-            </div>
-            <div id="export-section" class="section">
-                <div class="card">
-                    <h3>🤖 KI-Verbesserung</h3>
-                    <p>Kopieren Sie den folgenden Prompt und fügen Sie ihn in ChatGPT oder Claude ein.</p>
-                    <div class="ai-prompt-container">
-                        <pre id="ai-prompt" class="ai-prompt">Prompt wird generiert...</pre>
-                    </div>
-                    <div class="text-center mt-3">
-                        <button id="backToEditBtn" class="btn btn-secondary">Zurück</button>
-                        <button id="copyPromptBtn" class="btn">📋 Prompt kopieren</button>
-                        <button id="proceedToAIImportBtn" class="btn">Weiter zu KI-Import</button>
-                    </div>
-                </div>
-            </div>
-            <div id="import-section" class="section">
-                <div class="card">
-                    <h3>📥 KI-Antwort importieren</h3>
-                    <p>Fügen Sie die Antwort der KI hier ein:</p>
-                    <textarea id="ai-response" class="ai-response" placeholder="Fügen Sie hier die KI-Antwort ein..."></textarea>
-                    <div class="text-center mt-3">
-                        <button id="backToAIExportBtn" class="btn btn-secondary">Zurück</button>
-                        <button id="importBtn" class="btn">KI-Antwort importieren</button>
-                        <button onclick="showDebugInfo()" class="btn btn-secondary">🔍 Debug-Info anzeigen</button>
-                    </div>
-                </div>
-                <div id="debug-section" class="debug-section hidden">
-                    <h4>🔍 Debug-Informationen</h4>
-                    <p>Erkannte Vokabel-Blöcke: <span id="debug-count">0</span></p>
-                    <div id="debug-content" class="debug-content"></div>
-                </div>
-            </div>
-            <div id="final-review-section" class="section">
-                <div class="card">
-                    <h3>👁️ Finale Überprüfung</h3>
-                    <p>Überprüfen Sie die finalen Vokabeln vor dem Export.</p>
-                    <div style="margin-bottom: 20px;">
-                        <span>Finale Wörter:</span>
-                        <span id="final-word-count" class="word-count">0</span>
-                        <button id="addFinalWordBtn" class="btn btn-secondary" style="margin-left: 20px;">+ Wort hinzufügen</button>
-                    </div>
-                    <div style="overflow-x: auto;">
-                        <table class="words-table" role="grid" aria-live="polite" aria-relevant="all">
-                            <thead>
-                                <tr>
-                                    <th>Wort</th>
-                                    <th>Wortart</th>
-                                    <th>Begriffserklärung</th>
-                                    <th>Beispielsatz</th>
-                                    <th>Aktion</th>
-                                </tr>
-                            </thead>
-                            <tbody id="final-words-tbody"></tbody>
-                        </table>
-                    </div>
-                    <div class="text-center mt-3">
-                        <button id="backToAIImportBtn" class="btn btn-secondary">Zurück</button>
-                        <button id="proceedToFinalExportBtn" class="btn">Weiter zum Export</button>
-                    </div>
-                </div>
-            </div>
-            <div id="final-export-section" class="section">
-                <div class="card">
-                    <h3>📤 Export</h3>
-                    <p>Exportieren Sie Ihre Vokabelliste als PDF oder CSV.</p>
-                    <div class="text-center mt-3">
-                        <button id="backToFinalReviewBtn" class="btn btn-secondary">Zurück</button>
-                        <button id="exportPdfBtn" class="btn btn-success">📄 Als PDF exportieren</button>
-                        <button id="exportCsvBtn" class="btn btn-success">📊 Als CSV exportieren</button>
+                <!-- Preview Panel -->
+                <div class="panel preview-panel">
+                    <h2>Vorschau</h2>
+                    <div class="preview-container">
+                        <div class="a4-page" id="preview"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>📋 Über dieses Tool</h4>
-                <p>Das Vokabel-Extraktions-Tool wurde speziell für ausländische Berufsschüler entwickelt, um den Spracherwerb zu unterstützen.</p>
-            </div>
-            <div class="footer-section">
-                <h4>⚖️ Haftungsausschluss</h4>
-                <p>Die Nutzung dieses Tools erfolgt auf eigene Verantwortung. Alle Inhalte werden ohne Gewähr bereitgestellt. Für die Richtigkeit, Vollständigkeit und Aktualität der generierten Inhalte wird keine Haftung übernommen.</p>
-            </div>
-            <div class="footer-section">
-                <h4>🔒 Datenschutzhinweis</h4>
-                <p>Dieses Tool verarbeitet alle Daten ausschließlich lokal in Ihrem Browser. Es werden keine Daten an externe Server übertragen oder gespeichert. Ihre hochgeladenen Dokumente und erstellten Vokabellisten bleiben privat.</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 F. Wenisch | Alle Rechte vorbehalten</p>
-            <p style="margin-top: 5px; font-size: 0.8em;">Vokabel-Extraktions-Tool für Berufsschulen</p>
-        </div>
-    </footer>
+    <!-- Print View -->
+    <div class="print-only">
+        <div class="a4-page" id="printView"></div>
+    </div>
     <script>
-        let extractedWords = [];
-        let finalWords = [];
-        let rawDocumentContent = null;
-        let rawPdfDocument = null;
-        let documentType = '';
-        let totalPages = 0;
-        let selectedPages = 'all';
-        let pageRangeText = '';
-        let targetLanguageName = '';
-        let targetGroupName = '';
-        let contextExamplesText = '';
-        const MAX_FILE_SIZE_MB = 10;
-        const COMMON_GERMAN_WORDS = new Set([
-            "der", "die", "das", "und", "ist", "in", "es", "ein", "eine", "einer", "eines",
-            "nicht", "mit", "als", "für", "auf", "an", "sich", "von", "zu", "dem", "den",
-            "oder", "auch", "aber", "aus", "durch", "nach", "vor", "um", "bei", "zum", "zur",
-            "wie", "so", "noch", "schon", "nur", "sehr", "mehr", "kein", "keine", "er", "sie", "ihr",
-            "wir", "ich", "du", "was", "wer", "wo", "wann", "warum", "wie", "hat", "haben", "sein",
-            "werden", "kann", "können", "muss", "müssen", "soll", "sollen", "will", "wollen",
-            "hatte", "waren", "wurde", "würde", "dies", "diese", "dieser", "dieses", "alle", "jeder",
-            "man", "viel", "viele", "gut", "besser", "schlecht", "gern", "gerne", "immer", "nie", "oft",
-            "selten", "bald", "heute", "morgen", "gestern", "hier", "dort", "da", "neben", "unter", "über",
-            "zwischen", "hinter", "durch", "gegen", "ohne", "statt", "trotz", "während", "wegen",
-            "seit", "bis", "dann", "wenn", "obwohl", "damit", "sowie", "jedoch", "denn", "weil",
-            "dass", "ob", "als", "seit", "nachdem", "bevor", "während", "solange", "sobald", "kaum",
-            "weder", "noch", "entweder", "oder"
-        ]);
-        const WORD_TYPES = [
-            'Nomen', 'Verb', 'Adjektiv', 'Adverb', 'Pronomen',
-            'Präposition', 'Interjektion', 'Konjunktion', 'Partikel', 'Numerale', 'Andere'
+        // Material Options
+        const materialOptions = [
+            { name: "Mic", emoji: "🎤" },
+            { name: "Text", emoji: "📝" },
+            { name: "Foto", emoji: "📷" },
+            { name: "AB", emoji: "📋" },
+            { name: "Tablet", emoji: "📱" },
+            { name: "PC", emoji: "💻" },
+            { name: "Smartphone", emoji: "📲" }
         ];
-        const MAX_WORD_LENGTH = 80;
-        const MAX_DEFINITION_LENGTH = 80;
-        const MAX_EXAMPLE_LENGTH = 80;
-        const MAX_TRANSLATION_LENGTH = 80;
-        const MIN_WORD_CHARS = 2;
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeEventListeners();
-        });
-        
-        function setPreset(presetName) {
-            const targetGroupInput = document.getElementById('targetGroup');
-            if (targetGroupInput) {
-                targetGroupInput.value = presetName;
-                targetGroupName = presetName;
+        // Initial Tasks
+        const tasks = [
+            {
+                category: "Logikaufgabe",
+                categoryColor: "bg-white",
+                emoji: "🧩",
+                title: "Suchaufgabe",
+                description: "Finde 5 Unterschiede und und 3 Gemeinsamkeiten von Matthäus und Lukas",
+                materials: ["📝"]
+            },
+            {
+                category: "Schreibaufgabe",
+                categoryColor: "bg-green",
+                emoji: "📝",
+                title: "Weihnachten 2.0",
+                description: "Alternative I:\nSchreibe die Geschichte als würde sie heute passieren.\n\nAlternative II:\nWähle ein Weihnachtslied. Was will uns der Text sagen?",
+                materials: ["📝", "💻"]
+            },
+            {
+                category: "Naturaufgabe",
+                categoryColor: "bg-white",
+                emoji: "🎄",
+                title: "Natur",
+                description: "Alternative I:\nGestalte eine Adventüberraschung mit nachhaltigen Inhalten.\n\nAlternative II:\nRecherchiere: Woher kommt der Weihnachtsbaum? Welche Bedeutung hat er?",
+                materials: ["📝", "📷"]
+            },
+            {
+                category: "Musikaufgabe",
+                categoryColor: "bg-green",
+                emoji: "🎵",
+                title: "Reim und Klang",
+                description: "Wähle ein bekanntes Weihnachtslied. Arrangiere es neu oder kannst du es vielleicht in einem anderen Musikstil spielen?",
+                materials: ["🎤", "📝"]
+            },
+            {
+                category: "Partneraufgabe",
+                categoryColor: "bg-white",
+                emoji: "🤝",
+                title: "Im Gespräch",
+                description: "Wähle ein bekanntes Weihnachtslied. Bereite es pantomimisch mit einem Partner deiner Wahl vor.",
+                materials: ["🎤"]
+            },
+            {
+                category: "Darstellungsaufgabe",
+                categoryColor: "bg-green",
+                emoji: "🎨",
+                title: "Zusammengestellt",
+                description: "Baue eine Weihnachtskrippe mit Gegenständen aus deiner Umgebung. Lege eine Weihnachtsgeschichte zugrunde.",
+                materials: ["📷", "📝"]
+            },
+            {
+                category: "Weiter-Denk-Aufgabe",
+                categoryColor: "bg-white",
+                emoji: "🧠",
+                title: "Zukunftsgedanken",
+                description: "Lies die Weihnachtsgeschichte nach Lukas & die Geburtsgeschichte von Isa. Finde 3 Inhalte, die interreligiöses Verständnis schaffen.",
+                materials: ["📝", "💻"]
+            },
+            {
+                category: "In-sich-gehen-Aufgabe",
+                categoryColor: "bg-green",
+                emoji: "🧘",
+                title: "Beweggründe",
+                description: "Befrage Menschen verschiedener Religionen zu Weihnachten. Feiern sie Weihnachten? Wenn ja, wie?",
+                materials: ["🎤", "📝"]
+            },
+            {
+                category: "Räumliche Aufgabe",
+                categoryColor: "bg-white",
+                emoji: "🖼️",
+                title: "Malen",
+                description: "Zeichne eine Karte und markiere mit Farben oder Symbolen die Reise von Maria und Josef nach Bethlehem und die Flucht nach Ägypten. Markiere auf der Karte auch, die du im Zusammenhang mit Chanukka eine wichtige Rolle spielen.",
+                materials: ["📝", "📷", "📋"]
+            }
+        ];
+        // Generate AI Prompt
+        function generateAndCopyPrompt() {
+            const topic = document.getElementById('aiTopic').value.trim();
+            if (!topic) {
+                alert('Bitte gib zuerst ein Thema ein!');
+                return;
+            }
+            const prompt = `Erstelle ein TicTacToe-Arbeitsblatt zum Thema "${topic}" mit 9 verschiedenen Aufgaben.
+Verwende folgende Aufgabenkategorien (abwechselnd):
+1. Logikaufgabe
+2. Schreibaufgabe
+3. Naturaufgabe
+4. Musikaufgabe
+5. Partneraufgabe
+6. Darstellungsaufgabe
+7. Weiter-Denk-Aufgabe
+8. In-sich-gehen-Aufgabe
+9. Räumliche Aufgabe
+Für jede Aufgabe benötige ich folgende Informationen im Markdown-Format:
+# Aufgabe 1
+**Kategorie:** [Kategoriename]
+**Emoji:** [ein passendes Emoji]
+**Titel:** [kurzer Aufgabentitel]
+**Beschreibung:** [Detaillierte Aufgabenbeschreibung, gerne mit Alternativen]
+**Material:** [Liste von Emojis: 🎤, 📝, 📷, 📋, 📱, 💻, 📲]
+# Aufgabe 2
+...
+Wichtig:
+- Die Kategorien sollen thematisch zum Thema "${topic}" passen
+- Jede Aufgabe sollte kreativ und abwechslungsreich sein
+- Die Beschreibungen können mehrere Zeilen haben und Alternativen enthalten
+- Verwende nur die angegebenen Material-Emojis
+- Antworte NUR im Markdown-Format ohne zusätzliche Erklärungen`;
+            // Copy to clipboard
+            navigator.clipboard.writeText(prompt).then(() => {
+                showNotification('✅ Prompt wurde in die Zwischenablage kopiert!');
+            }).catch(err => {
+                alert('Fehler beim Kopieren: ' + err);
+            });
+        }
+        // Parse AI Response
+        function parseAIResponse() {
+            const response = document.getElementById('aiResponse').value.trim();
+            if (!response) {
+                alert('Bitte füge zuerst die KI-Antwort ein!');
+                return;
+            }
+            try {
+                // Parse the markdown response
+                const parsedTasks = parseMarkdownTasks(response);
+                if (parsedTasks.length !== 9) {
+                    alert(`Warnung: Es wurden ${parsedTasks.length} Aufgaben gefunden. Es sollten genau 9 sein.`);
+                }
+                // Update tasks array
+                parsedTasks.forEach((task, index) => {
+                    if (index < tasks.length) {
+                        tasks[index].emoji = task.emoji || tasks[index].emoji;
+                        tasks[index].title = task.title || tasks[index].title;
+                        tasks[index].description = task.description || tasks[index].description;
+                        tasks[index].materials = task.materials.length > 0 ? task.materials : tasks[index].materials;
+                        // Category stays the same (static)
+                    }
+                });
+                // Update main title if topic was provided
+                const topic = document.getElementById('aiTopic').value.trim();
+                if (topic) {
+                    document.getElementById('mainTitle').value = topic;
+                }
+                // Regenerate editors and preview
+                generateTaskEditors();
+                updatePreview();
+                showNotification('✅ KI-Antwort erfolgreich verarbeitet! Bitte überprüfe die Felder.');
+                // Clear AI response field
+                document.getElementById('aiResponse').value = '';
+            } catch (error) {
+                alert('Fehler beim Verarbeiten der KI-Antwort: ' + error.message);
+                console.error(error);
             }
         }
-        
-        function sanitizeInput(input, type = 'text') {
-            if (typeof input !== 'string') return '';
-            let sanitized = input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            if (type === 'word') {
-                sanitized = sanitized.replace(/[^a-zA-ZäöüÄÖÜß\s\(\)\[\]\{\}\-'\.,;:]/g, '');
-                sanitized = sanitized.substring(0, MAX_WORD_LENGTH);
-            } else if (type === 'definition' || type === 'example') {
-                sanitized = sanitized.substring(0, MAX_DEFINITION_LENGTH);
-            } else if (type === 'translation') {
-                sanitized = sanitized.substring(0, MAX_TRANSLATION_LENGTH);
-            } else if (type === 'pageRange') {
-                sanitized = sanitized.replace(/[^0-9,\-\s]/g, '');
-            }
-            return sanitized.trim();
-        }
-        
-        function parseMarkdownResponse(rawResponse) {
-            const parsedWords = [];
-            
-            let cleanedResponse = rawResponse.replace(/```markdown\s*/gi, '').replace(/```\s*/g, '');
-            
-            const blocks = cleanedResponse.split(/\n\s*\n+/);
-            
-            for (let block of blocks) {
-                if (!block.trim()) continue;
-                
-                const wordEntry = {
-                    word: '',
-                    wordType: '',
-                    definition: '',
-                    example: '',
-                    translation: ''
+        // Parse Markdown Tasks
+        function parseMarkdownTasks(markdown) {
+            const tasks = [];
+            const taskBlocks = markdown.split(/# Aufgabe \d+/).slice(1);
+            taskBlocks.forEach(block => {
+                const task = {
+                    emoji: '',
+                    title: '',
+                    description: '',
+                    materials: []
                 };
-                
-                block = block.replace(/^\d+\.\s*/, '');
-                
-                const lines = block.split('\n').map(line => line.trim()).filter(line => line);
-                
-                for (let line of lines) {
-                    line = line.replace(/\*\*/g, '').replace(/\*/g, '');
-                    
-                    if (line.match(/^Wort:/i)) {
-                        wordEntry.word = line.replace(/^Wort:\s*/i, '').trim();
-                    }
-                    else if (line.match(/^Wortart:/i)) {
-                        wordEntry.wordType = line.replace(/^Wortart:\s*/i, '').trim();
-                    }
-                    else if (line.match(/^Begriffserklärung:/i)) {
-                        wordEntry.definition = line.replace(/^Begriffserklärung:\s*/i, '').trim();
-                    }
-                    else if (line.match(/^Beispielsatz:/i)) {
-                        wordEntry.example = line.replace(/^Beispielsatz:\s*/i, '').trim();
-                    }
-                    else if (line.match(/^Übersetzung(\s*\([^)]+\))?:/i)) {
-                        wordEntry.translation = line.replace(/^Übersetzung(\s*\([^)]+\))?:\s*/i, '').trim();
-                    }
+                // Extract emoji
+                const emojiMatch = block.match(/\*\*Emoji:\*\*\s*(.+)/);
+                if (emojiMatch) {
+                    task.emoji = emojiMatch[1].trim();
                 }
-                
-                if (wordEntry.word) {
-                    parsedWords.push({
-                        word: sanitizeInput(wordEntry.word, 'word'),
-                        wordType: sanitizeInput(wordEntry.wordType, 'text'),
-                        definition: sanitizeInput(wordEntry.definition, 'definition'),
-                        example: sanitizeInput(wordEntry.example, 'example'),
-                        translation: sanitizeInput(wordEntry.translation, 'translation')
-                    });
+                // Extract title
+                const titleMatch = block.match(/\*\*Titel:\*\*\s*(.+)/);
+                if (titleMatch) {
+                    task.title = titleMatch[1].trim();
                 }
-            }
-            
-            return parsedWords;
-        }
-        
-        function initializeEventListeners() {
-            const elements = {
-                fileInput: document.getElementById('fileInput'),
-                extractBtn: document.getElementById('extractBtn'),
-                addWordBtn: document.getElementById('addWordBtn'),
-                addFinalWordBtn: document.getElementById('addFinalWordBtn'),
-                backToUploadBtn: document.getElementById('backToUploadBtn'),
-                backToExtractBtn: document.getElementById('backToExtractBtn'),
-                backToEditBtn: document.getElementById('backToEditBtn'),
-                backToAIExportBtn: document.getElementById('backToAIExportBtn'),
-                backToFinalReviewBtn: document.getElementById('backToFinalReviewBtn'),
-                proceedToAIExportBtn: document.getElementById('proceedToAIExportBtn'),
-                copyPromptBtn: document.getElementById('copyPromptBtn'),
-                proceedToAIImportBtn: document.getElementById('proceedToAIImportBtn'),
-                importBtn: document.getElementById('importBtn'),
-                proceedToFinalExportBtn: document.getElementById('proceedToFinalExportBtn'),
-                exportPdfBtn: document.getElementById('exportPdfBtn'),
-                exportCsvBtn: document.getElementById('exportCsvBtn'),
-                targetLanguage: document.getElementById('targetLanguage'),
-                targetGroup: document.getElementById('targetGroup'),
-                contextExamples: document.getElementById('contextExamples'),
-                pageRange: document.getElementById('pageRange'),
-                fileUploadArea: document.querySelector('.file-upload')
-            };
-            
-            if (elements.fileInput) elements.fileInput.addEventListener('change', handleFileUpload);
-            if (elements.extractBtn) elements.extractBtn.addEventListener('click', extractWords);
-            if (elements.addWordBtn) elements.addWordBtn.addEventListener('click', () => addNewWord('words-tbody', extractedWords, 'word-count'));
-            if (elements.addFinalWordBtn) elements.addFinalWordBtn.addEventListener('click', () => addNewWord('final-words-tbody', finalWords, 'final-word-count'));
-            if (elements.backToUploadBtn) elements.backToUploadBtn.addEventListener('click', () => { showSection('upload-section'); updateStepIndicator(1); });
-            if (elements.backToExtractBtn) elements.backToExtractBtn.addEventListener('click', () => { showSection('extract-section'); updateStepIndicator(2); });
-            if (elements.backToEditBtn) elements.backToEditBtn.addEventListener('click', () => { showSection('edit-list-section'); updateStepIndicator(3); });
-            if (elements.backToAIExportBtn) elements.backToAIExportBtn.addEventListener('click', () => { showSection('export-section'); updateStepIndicator(4); });
-            if (elements.backToFinalReviewBtn) elements.backToFinalReviewBtn.addEventListener('click', () => { showSection('final-review-section'); updateStepIndicator(6); });
-            
-            if (elements.proceedToAIExportBtn) {
-                elements.proceedToAIExportBtn.addEventListener('click', async () => {
-                    showSection('export-section');
-                    updateStepIndicator(4);
-                    targetLanguageName = elements.targetLanguage ? sanitizeInput(elements.targetLanguage.value.trim(), 'text') : '';
-                    targetGroupName = elements.targetGroup ? sanitizeInput(elements.targetGroup.value.trim(), 'text') : '';
-                    contextExamplesText = elements.contextExamples ? sanitizeInput(elements.contextExamples.value.trim(), 'text') : '';
-                    const promptElement = document.getElementById('ai-prompt');
-                    if (promptElement) promptElement.textContent = await generateAIPrompt();
-                });
-            }
-            
-            if (elements.copyPromptBtn) elements.copyPromptBtn.addEventListener('click', copyPrompt);
-            if (elements.proceedToAIImportBtn) elements.proceedToAIImportBtn.addEventListener('click', () => { showSection('import-section'); updateStepIndicator(5); });
-            if (elements.importBtn) elements.importBtn.addEventListener('click', importFromAI);
-            if (elements.proceedToFinalExportBtn) elements.proceedToFinalExportBtn.addEventListener('click', () => { showSection('final-export-section'); updateStepIndicator(7); });
-            if (elements.exportPdfBtn) elements.exportPdfBtn.addEventListener('click', exportToPDF);
-            if (elements.exportCsvBtn) elements.exportCsvBtn.addEventListener('click', exportToCSV);
-            
-            if (elements.targetLanguage) {
-                elements.targetLanguage.addEventListener('input', async (e) => {
-                    targetLanguageName = sanitizeInput(e.target.value.trim(), 'text');
-                });
-            }
-            
-            if (elements.targetGroup) {
-                elements.targetGroup.addEventListener('input', (e) => {
-                    targetGroupName = sanitizeInput(e.target.value.trim(), 'text');
-                });
-            }
-            
-            if (elements.contextExamples) {
-                elements.contextExamples.addEventListener('input', (e) => {
-                    contextExamplesText = sanitizeInput(e.target.value.trim(), 'text');
-                });
-            }
-            
-            if (elements.fileUploadArea) {
-                elements.fileUploadArea.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                    elements.fileUploadArea.classList.add('dragover');
-                });
-                elements.fileUploadArea.addEventListener('dragleave', () => {
-                    elements.fileUploadArea.classList.remove('dragover');
-                });
-                elements.fileUploadArea.addEventListener('drop', (e) => {
-                    e.preventDefault();
-                    elements.fileUploadArea.classList.remove('dragover');
-                    const files = e.dataTransfer.files;
-                    if (files.length > 0) handleFileUpload({ target: { files } });
-                });
-            }
-            
-            const pageSelectionRadios = document.querySelectorAll('input[name="pageSelection"]');
-            if (pageSelectionRadios.length > 0) {
-                pageSelectionRadios.forEach(radio => {
-                    radio.addEventListener('change', (e) => {
-                        if (elements.pageRange) {
-                            elements.pageRange.style.display = e.target.value === 'specific' ? 'block' : 'none';
+                // Extract description
+                const descMatch = block.match(/\*\*Beschreibung:\*\*\s*([\s\S]*?)\*\*Material:\*\*/);
+                if (descMatch) {
+                    task.description = descMatch[1].trim();
+                }
+                // Extract materials
+                const materialMatch = block.match(/\*\*Material:\*\*\s*(.+)/);
+                if (materialMatch) {
+                    const materialStr = materialMatch[1];
+                    const validEmojis = ["🎤", "📝", "📷", "📋", "📱", "💻", "📲"];
+                    validEmojis.forEach(emoji => {
+                        if (materialStr.includes(emoji)) {
+                            task.materials.push(emoji);
                         }
-                        selectedPages = e.target.value;
                     });
-                });
-            }
-            
-            if (elements.pageRange) {
-                elements.pageRange.addEventListener('input', (e) => {
-                    pageRangeText = e.target.value.trim();
-                });
-            }
-        }
-        
-        function showSection(sectionId) {
-            const sections = document.querySelectorAll('.section');
-            sections.forEach(section => section.classList.remove('active'));
-            const targetSection = document.getElementById(sectionId);
-            if (targetSection) {
-                targetSection.classList.add('active');
-                const firstInteractiveElement = targetSection.querySelector('button, input, textarea, select');
-                if (firstInteractiveElement) firstInteractiveElement.focus();
-            }
-        }
-        
-        function updateStepIndicator(stepNumber) {
-            const steps = document.querySelectorAll('.step');
-            steps.forEach((step, index) => {
-                if (index + 1 === stepNumber) {
-                    step.classList.add('active');
-                } else {
-                    step.classList.remove('active');
                 }
+                tasks.push(task);
             });
+            return tasks;
         }
-        
-        function showError(message) {
-            document.querySelectorAll('.error, .success').forEach(el => el.remove());
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'error';
-            errorDiv.textContent = message;
-            const mainContent = document.querySelector('.main-content');
-            if (mainContent) {
-                mainContent.prepend(errorDiv);
-                setTimeout(() => errorDiv.remove(), 7000);
-            }
+        // Show Notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
         }
-        
-        function showSuccess(message) {
-            document.querySelectorAll('.error, .success').forEach(el => el.remove());
-            const successDiv = document.createElement('div');
-            successDiv.className = 'success';
-            successDiv.textContent = message;
-            const mainContent = document.querySelector('.main-content');
-            if (mainContent) {
-                mainContent.prepend(successDiv);
-                setTimeout(() => successDiv.remove(), 5000);
-            }
-        }
-        
-        function showDebugInfo() {
-            const aiResponseElement = document.getElementById('ai-response');
-            if (!aiResponseElement) {
-                showError('Debug-Funktion nicht verfügbar.');
-                return;
-            }
-            const aiResponse = aiResponseElement.value.trim();
-            if (!aiResponse) {
-                showError('Bitte fügen Sie zuerst die KI-Antwort ein.');
-                return;
-            }
-            const debugSection = document.getElementById('debug-section');
-            const debugContent = document.getElementById('debug-content');
-            const debugCount = document.getElementById('debug-count');
-            if (!debugSection || !debugContent || !debugCount) {
-                showError('Debug-Elemente nicht gefunden.');
-                return;
-            }
-            const parsedDebugWords = parseMarkdownResponse(aiResponse);
-            let debugInfo = `=== KI-ANTWORT DEBUGGING (MARKDOWN-FORMAT) ===\n\n`;
-            debugInfo += `Rohe Antwort-Länge: ${aiResponse.length} Zeichen\n\n`;
-            debugInfo += `Erste 500 Zeichen:\n"${aiResponse.substring(0, 500)}"\n\n`;
-            debugInfo += `Erkannte Vokabel-Blöcke: ${parsedDebugWords.length}\n\n`;
-            parsedDebugWords.slice(0, 10).forEach((wordObj, index) => {
-                debugInfo += `--- Block ${index + 1} ---\n`;
-                debugInfo += `Wort: "${wordObj.word || 'N/A'}"\n`;
-                debugInfo += `Wortart: "${wordObj.wordType || 'N/A'}"\n`;
-                debugInfo += `Begriffserklärung: "${wordObj.definition || 'N/A'}"\n`;
-                debugInfo += `Beispielsatz: "${wordObj.example || 'N/A'}"\n`;
-                debugInfo += `Übersetzung: "${wordObj.translation || 'N/A'}"\n\n`;
+        // Generate Task Editors
+        function generateTaskEditors() {
+            const container = document.getElementById('taskEditors');
+            container.innerHTML = '';
+            tasks.forEach((task, index) => {
+                const editor = document.createElement('div');
+                editor.className = 'task-editor';
+                editor.innerHTML = `
+                    <h4>Feld ${index + 1}</h4>
+                    <div class="task-field">
+                        <label>Kategorie (statisch):</label>
+                        <input type="text" value="${task.category}" disabled>
+                    </div>
+                    <div class="task-field">
+                        <label>Emoji:</label>
+                        <input type="text" class="emoji-input" value="${task.emoji}" data-index="${index}" data-field="emoji">
+                    </div>
+                    <div class="task-field">
+                        <label>Aufgabentitel:</label>
+                        <input type="text" value="${task.title}" data-index="${index}" data-field="title">
+                    </div>
+                    <div class="task-field">
+                        <label>Aufgabenbeschreibung:</label>
+                        <textarea rows="4" data-index="${index}" data-field="description">${task.description}</textarea>
+                    </div>
+                    <div class="task-field">
+                        <label>Material:</label>
+                        <div class="material-grid">
+                            ${materialOptions.map(mat => `
+                                <label class="material-option">
+                                    <input type="checkbox"
+                                           ${task.materials.includes(mat.emoji) ? 'checked' : ''}
+                                           data-index="${index}"
+                                           data-material="${mat.emoji}">
+                                    <span class="emoji">${mat.emoji}</span>
+                                    <span class="name">${mat.name}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                container.appendChild(editor);
             });
-            if (parsedDebugWords.length > 10) {
-                debugInfo += `... und ${parsedDebugWords.length - 10} weitere Blöcke.\n`;
-            }
-            debugCount.textContent = parsedDebugWords.length;
-            debugContent.textContent = debugInfo;
-            debugSection.classList.remove('hidden');
+            // Add event listeners
+            addEventListeners();
         }
-        
-        async function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
-                showError(`Die Datei ist zu groß. Maximale Größe ist ${MAX_FILE_SIZE_MB} MB.`);
-                return;
-            }
-            const fileNameElement = document.getElementById('file-name');
-            const fileInfoElement = document.getElementById('file-info');
-            const progressFill = document.getElementById('progress-fill');
-            const totalPdfPagesElement = document.getElementById('total-pdf-pages');
-            if (!fileNameElement || !fileInfoElement || !progressFill || !totalPdfPagesElement) {
-                showError('UI-Elemente fehlen.');
-                return;
-            }
-            fileNameElement.textContent = file.name;
-            fileInfoElement.classList.remove('hidden');
-            progressFill.style.width = '0%';
-            rawDocumentContent = null;
-            rawPdfDocument = null;
-            documentType = '';
-            totalPages = 0;
-            totalPdfPagesElement.textContent = 'N/A';
-            try {
-                if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
-                    documentType = 'pdf';
-                    if (typeof pdfjsLib !== 'undefined') {
-                        pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`;
-                        const arrayBuffer = await file.arrayBuffer();
-                        rawPdfDocument = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-                        totalPages = rawPdfDocument.numPages;
-                        totalPdfPagesElement.textContent = totalPages;
-                        showSuccess(`PDF "${file.name}" geladen. Seiten: ${totalPages}`);
+        // Add Event Listeners
+        function addEventListeners() {
+            // Main title
+            document.getElementById('mainTitle').addEventListener('input', updatePreview);
+            // Background color
+            document.getElementById('backgroundColor').addEventListener('change', updatePreview);
+            // License
+            document.getElementById('license').addEventListener('input', function() {
+                document.getElementById('licensePreview').textContent = this.value;
+                updatePreview();
+            });
+            // Task fields
+            document.querySelectorAll('[data-field]').forEach(input => {
+                input.addEventListener('input', function() {
+                    const index = parseInt(this.dataset.index);
+                    const field = this.dataset.field;
+                    tasks[index][field] = this.value;
+                    updatePreview();
+                });
+            });
+            // Material checkboxes
+            document.querySelectorAll('[data-material]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const index = parseInt(this.dataset.index);
+                    const material = this.dataset.material;
+                    if (this.checked) {
+                        if (!tasks[index].materials.includes(material)) {
+                            tasks[index].materials.push(material);
+                        }
                     } else {
-                        throw new Error('PDF.js nicht geladen.');
+                        tasks[index].materials = tasks[index].materials.filter(m => m !== material);
                     }
-                } else if (file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-                    documentType = 'docx';
-                    if (typeof mammoth !== 'undefined') {
-                        const arrayBuffer = await file.arrayBuffer();
-                        const result = await mammoth.extractRawText({ arrayBuffer: arrayBuffer });
-                        rawDocumentContent = result.value;
-                        showSuccess(`Word-Datei "${file.name}" geladen.`);
-                    } else {
-                        throw new Error('Mammoth.js nicht geladen.');
-                    }
-                } else if (file.type === 'text/plain') {
-                    documentType = 'txt';
-                    rawDocumentContent = await file.text();
-                    showSuccess(`Textdatei "${file.name}" geladen.`);
-                } else {
-                    showError('Nicht unterstütztes Dateiformat.');
-                    return;
-                }
-                progressFill.style.width = '100%';
-                showSection('extract-section');
-                updateStepIndicator(2);
-            } catch (error) {
-                showError('Fehler beim Laden: ' + (error.message || 'Unbekannter Fehler.'));
-                progressFill.style.width = '0%';
-                fileInfoElement.classList.add('hidden');
-            }
-        }
-        
-        function parsePageRange(pageRangeInput, totalPages) {
-            const sanitizedInput = sanitizeInput(pageRangeInput, 'pageRange');
-            const pages = new Set();
-            if (!sanitizedInput) {
-                showError('Ungültige Seitenauswahl.');
-                return null;
-            }
-            const parts = sanitizedInput.split(',').map(s => s.trim());
-            for (const part of parts) {
-                if (!part) continue;
-                if (part.includes('-')) {
-                    const rangeParts = part.split('-').map(Number);
-                    if (rangeParts.length !== 2 || isNaN(rangeParts[0]) || isNaN(rangeParts[1]) || rangeParts[0] > rangeParts[1]) {
-                        showError(`Ungültiger Bereich "${part}".`);
-                        return null;
-                    }
-                    let [start, end] = rangeParts;
-                    start = Math.max(1, start);
-                    end = Math.min(totalPages, end);
-                    for (let i = start; i <= end; i++) pages.add(i);
-                } else {
-                    const pageNum = Number(part);
-                    if (isNaN(pageNum) || pageNum < 1 || pageNum > totalPages) {
-                        showError(`Ungültige Seitenzahl "${part}".`);
-                        return null;
-                    }
-                    pages.add(pageNum);
-                }
-            }
-            if (pages.size === 0) {
-                showError('Keine gültigen Seiten.');
-                return null;
-            }
-            return Array.from(pages).sort((a, b) => a - b);
-        }
-        
-        async function extractTextFromPdf(pdfDocument, pageSelectionType, pageRangeString) {
-            let fullText = '';
-            let pagesToExtract = [];
-            if (pageSelectionType === 'all') {
-                for (let i = 1; i <= pdfDocument.numPages; i++) pagesToExtract.push(i);
-            } else {
-                const parsedPages = parsePageRange(pageRangeString, pdfDocument.numPages);
-                if (parsedPages === null) throw new Error("Ungültige Seitenauswahl.");
-                pagesToExtract = parsedPages;
-            }
-            if (pagesToExtract.length === 0) throw new Error("Keine Seiten zum Extrahieren.");
-            for (const pageNum of pagesToExtract) {
-                try {
-                    const page = await pdfDocument.getPage(pageNum);
-                    const textContent = await page.getTextContent();
-                    const pageText = textContent.items.map(item => item.str).filter(Boolean).join(' ').replace(/\s+/g, ' ').trim();
-                    fullText += pageText + '\n\n';
-                } catch (pageError) {
-                    showError(`Warnung: Seite ${pageNum} nicht extrahiert.`);
-                }
-            }
-            return fullText;
-        }
-        
-        async function extractWords() {
-            let textToProcess = '';
-            extractedWords = [];
-            try {
-                if (documentType === 'pdf') {
-                    if (!rawPdfDocument) {
-                        showError('Kein PDF geladen.');
-                        return;
-                    }
-                    textToProcess = await extractTextFromPdf(rawPdfDocument, selectedPages, pageRangeText);
-                } else if (documentType === 'docx' || documentType === 'txt') {
-                    if (!rawDocumentContent) {
-                        showError('Kein Dokument geladen.');
-                        return;
-                    }
-                    textToProcess = rawDocumentContent;
-                } else {
-                    showError('Bitte laden Sie zuerst eine Datei hoch.');
-                    return;
-                }
-                const words = textToProcess.match(/\b[a-zA-ZäöüÄÖÜß-]{2,}\b/g) || [];
-                const uniqueWords = [...new Set(words.map(word => word.toLowerCase()))];
-                extractedWords = uniqueWords
-                    .filter(word =>
-                        word.length >= MIN_WORD_CHARS &&
-                        !COMMON_GERMAN_WORDS.has(word) &&
-                        /^[a-zA-ZäöüÄÖÜß-]+$/.test(word)
-                    )
-                    .map(word => ({
-                        word: word,
-                        wordType: 'Nomen',
-                        definition: '',
-                        example: ''
-                    }));
-                renderWordsTable('words-tbody', extractedWords, 'word-count');
-                showSection('edit-list-section');
-                updateStepIndicator(3);
-                showSuccess(`${extractedWords.length} Wörter extrahiert.`);
-            } catch (error) {
-                showError('Fehler beim Extrahieren: ' + (error.message || 'Unbekannter Fehler.'));
-            }
-        }
-        
-        function renderWordsTable(tbodyId, wordsArray, countId) {
-            const tbody = document.getElementById(tbodyId);
-            const countElement = document.getElementById(countId);
-            if (!tbody) {
-                showError(`Tabelle nicht gefunden (${tbodyId}).`);
-                return;
-            }
-            const fragment = document.createDocumentFragment();
-            const tableHeadersRow = tbody.previousElementSibling.querySelector('thead tr');
-            let existingTranslationHeader = tableHeadersRow.querySelector('th[data-col="translation"]');
-            if (tbodyId !== 'final-words-tbody' && existingTranslationHeader) {
-                existingTranslationHeader.remove();
-            } else if (tbodyId === 'final-words-tbody' && !existingTranslationHeader) {
-                const translationHeader = document.createElement('th');
-                translationHeader.scope = 'col';
-                translationHeader.textContent = 'Übersetzung';
-                translationHeader.setAttribute('data-col', 'translation');
-                tableHeadersRow.insertBefore(translationHeader, tableHeadersRow.children[4]);
-            }
-            wordsArray.forEach((wordObj, index) => {
-                const row = document.createElement('tr');
-                const wordCell = document.createElement('td');
-                const wordInput = document.createElement('input');
-                wordInput.type = 'text';
-                wordInput.className = 'word-input';
-                wordInput.value = wordObj.word;
-                wordInput.setAttribute('maxlength', MAX_WORD_LENGTH);
-                wordInput.addEventListener('input', (e) => {
-                    wordObj.word = sanitizeInput(e.target.value, 'word');
-                    e.target.value = wordObj.word;
+                    updatePreview();
                 });
-                wordCell.appendChild(wordInput);
-                row.appendChild(wordCell);
-                const wordTypeCell = document.createElement('td');
-                const wordTypeSelect = document.createElement('select');
-                wordTypeSelect.className = 'dropdown';
-                WORD_TYPES.forEach(type => {
-                    const option = document.createElement('option');
-                    option.value = type;
-                    option.textContent = type;
-                    if (wordObj.wordType === type) option.selected = true;
-                    wordTypeSelect.appendChild(option);
-                });
-                wordTypeSelect.addEventListener('change', (e) => wordObj.wordType = e.target.value);
-                wordTypeCell.appendChild(wordTypeSelect);
-                row.appendChild(wordTypeCell);
-                const definitionCell = document.createElement('td');
-                const definitionTextarea = document.createElement('textarea');
-                definitionTextarea.className = 'word-textarea';
-                definitionTextarea.value = wordObj.definition;
-                definitionTextarea.placeholder = 'Kurze Erklärung';
-                definitionTextarea.setAttribute('maxlength', MAX_DEFINITION_LENGTH);
-                definitionTextarea.addEventListener('input', (e) => {
-                    wordObj.definition = sanitizeInput(e.target.value, 'definition');
-                    e.target.value = wordObj.definition;
-                });
-                definitionCell.appendChild(definitionTextarea);
-                row.appendChild(definitionCell);
-                const exampleCell = document.createElement('td');
-                const exampleTextarea = document.createElement('textarea');
-                exampleTextarea.className = 'word-textarea';
-                exampleTextarea.value = wordObj.example;
-                exampleTextarea.placeholder = 'Kurzer Beispielsatz';
-                exampleTextarea.setAttribute('maxlength', MAX_EXAMPLE_LENGTH);
-                exampleTextarea.addEventListener('input', (e) => {
-                    wordObj.example = sanitizeInput(e.target.value, 'example');
-                    e.target.value = wordObj.example;
-                });
-                exampleCell.appendChild(exampleTextarea);
-                row.appendChild(exampleCell);
-                if (tbodyId === 'final-words-tbody') {
-                    const translationCell = document.createElement('td');
-                    const translationTextarea = document.createElement('textarea');
-                    translationTextarea.className = 'word-textarea';
-                    translationTextarea.value = wordObj.translation || '';
-                    translationTextarea.placeholder = 'Übersetzung';
-                    translationTextarea.setAttribute('maxlength', MAX_TRANSLATION_LENGTH);
-                    translationTextarea.addEventListener('input', (e) => {
-                        wordObj.translation = sanitizeInput(e.target.value, 'translation');
-                        e.target.value = wordObj.translation;
-                    });
-                    translationCell.appendChild(translationTextarea);
-                    row.appendChild(translationCell);
-                }
-                const actionCell = document.createElement('td');
-                const deleteButton = document.createElement('button');
-                deleteButton.className = 'delete-btn';
-                deleteButton.textContent = 'Löschen';
-                deleteButton.addEventListener('click', () => {
-                    const rowIndex = Array.from(tbody.children).indexOf(row);
-                    if (rowIndex > -1) {
-                        wordsArray.splice(rowIndex, 1);
-                        renderWordsTable(tbodyId, wordsArray, countId);
-                        showSuccess('Wort gelöscht.');
-                    }
-                });
-                actionCell.appendChild(deleteButton);
-                row.appendChild(actionCell);
-                fragment.appendChild(row);
             });
-            tbody.innerHTML = '';
-            tbody.appendChild(fragment);
-            if (countElement) countElement.textContent = wordsArray.length;
         }
-        
-        function addNewWord(tbodyId, wordsArray, countId) {
-            wordsArray.push({
-                word: '',
-                wordType: 'Nomen',
-                definition: '',
-                example: '',
-                translation: ''
-            });
-            renderWordsTable(tbodyId, wordsArray, countId);
-            const tbody = document.getElementById(tbodyId);
-            if (tbody && tbody.lastElementChild) {
-                const wordInput = tbody.lastElementChild.querySelector('.word-input');
-                if (wordInput) wordInput.focus();
-            }
-            showSuccess('Neues Wort hinzugefügt.');
+        // Generate TicTacToe HTML
+        function generateTicTacToe() {
+            const mainTitle = document.getElementById('mainTitle').value;
+            const backgroundColor = document.getElementById('backgroundColor').value;
+            const license = document.getElementById('license').value;
+            const cellsHTML = tasks.map((task, index) => {
+                const shouldColor = [1, 3, 5, 7].includes(index);
+                const cellBackgroundColor = shouldColor ? backgroundColor : '#FFFFFF';
+                return `
+                    <div class="tictactoe-cell" style="background-color: ${cellBackgroundColor}">
+                        <div class="cell-content">
+                            <div class="category-badge ${task.categoryColor}">${task.category}</div>
+                            <div class="cell-emoji">${task.emoji}</div>
+                            <div class="cell-title">${task.title}</div>
+                            <div class="cell-description">${task.description}</div>
+                        </div>
+                        <div class="cell-materials">${task.materials.join(' ')}</div>
+                    </div>
+                `;
+            }).join('');
+            return `
+                <h1>${mainTitle}</h1>
+                <div class="tictactoe-grid">
+                    ${cellsHTML}
+                </div>
+                <div class="footer">
+                    <p>Vorlage erstellt von F. Wenisch | Lizenz: ${license}</p>
+                    <p class="disclaimer">Haftungsausschluss: Die Verwendung erfolgt auf eigene Verantwortung. Der Ersteller übernimmt keine Haftung für die Inhalte oder deren Verwendung.</p>
+                    <p style="margin-top: 0.25rem;">🔒 Diese Vorlage ist datenschutzkonform und arbeitet ohne externe Verbindungen (DSGVO-konform).</p>
+                </div>
+            `;
         }
-        
-        async function generateAIPrompt() {
-            if (extractedWords.length === 0) {
-                return "Bitte extrahieren Sie zuerst Wörter. Der Prompt wird dann hier generiert.";
-            }
-            
-            const vocabularyList = extractedWords.map(word => {
-                let entry = `- ${sanitizeInput(word.word, 'word')}`;
-                if (word.wordType && word.wordType !== 'Andere' && word.wordType !== '') {
-                    entry += ` (${sanitizeInput(word.wordType, 'text')})`;
-                }
-                if (word.definition) {
-                    entry += ` - ${sanitizeInput(word.definition, 'definition')}`;
-                }
-                if (word.example) {
-                    entry += ` | Beispiel: ${sanitizeInput(word.example, 'example')}`;
-                }
-                return entry;
-            }).join('\n');
-            
-            const targetGroupText = targetGroupName ? targetGroupName : 'Berufsschüler';
-            const contextText = contextExamplesText ? `\n\nKONTEXT-HINWEISE:\nBitte verwende in den Beispielsätzen Bezüge zu folgenden Themen: ${contextExamplesText}` : '';
-            
-            let prompt = `Du bist ein Sprachlehrer für ausländische ${targetGroupText}.
-
-WICHTIG - AUSGABEFORMAT:
-Antworte AUSSCHLIESSLICH im MARKDOWN-Format!
-Nutze KEINE Code-Blöcke (keine \`\`\`markdown), sondern reines Markdown!
-
-KRITISCH - LIES ZUERST:
-Die unten aufgeführten Wörter stammen aus einem hochgeladenen Dokument.
-Bearbeite AUSSCHLIESSLICH diese vorgegebenen Wörter - erfinde KEINE eigenen!
-Auch wenn Wörter nicht zum Bereich ${targetGroupText} passen, müssen sie bearbeitet werden.
-Ersetze oder überspringe NIEMALS ein Wort aus der Liste!
-
-AUFGABE:
-Erstelle eine alphabetisch sortierte Vokabelliste (ignoriere Artikel bei der Sortierung).
-Die Schüler benötigen kurze, klare und präzise Informationen - keine langen Texte!
-${contextText}
-
-MARKDOWN-FORMAT (EXAKT SO):
-Für jedes Wort aus der Liste:
-
-1.
-**Wort:** [grammatikalische Form]
-**Wortart:** [Wortart]
-**Begriffserklärung:** [max. 80 Zeichen]
-**Beispielsatz:** [max. 80 Zeichen]`;
-
-            if (targetLanguageName) {
-                prompt += `
-**Übersetzung (${sanitizeInput(targetLanguageName, 'text')}):** [max. 80 Zeichen]`;
-            }
-
-            prompt += `
-
-2.
-**Wort:** [grammatikalische Form]
-**Wortart:** [Wortart]
-**Begriffserklärung:** [max. 80 Zeichen]
-**Beispielsatz:** [max. 80 Zeichen]`;
-
-            if (targetLanguageName) {
-                prompt += `
-**Übersetzung (${sanitizeInput(targetLanguageName, 'text')}):** [max. 80 Zeichen]`;
-            }
-
-            prompt += `
-
-GRAMMATIKALISCHE FORMEN:
-• Nomen: Artikel + Singular + Plural
-  Beispiel: "das Werkzeug, die Werkzeuge" oder "die Aufgabe, die Aufgaben"
-• Verben: Infinitiv, 3. Person Präsens, Präteritum, Partizip II
-  Beispiel: "arbeiten, arbeitet, arbeitete, gearbeitet"
-• Adjektive: Positiv, Komparativ, Superlativ
-  Beispiel: "wichtig, wichtiger, am wichtigsten"
-
-REGELN FÜR BEGRIFFSERKLÄRUNGEN UND BEISPIELE:
-✓ Maximal 80 Zeichen - das ist essentiell!
-✓ Einfache Wörter verwenden (A1-B1 Niveau)
-✓ Kurze Hauptsätze, keine Nebensätze
-✓ Aktiv statt Passiv
-✓ Ein Gedanke pro Satz
-✓ Bezug zum Bereich ${targetGroupText} wo passend
-✓ Bei anderen Wörtern: Allgemeiner, leicht verständlicher Kontext
-
-NOCHMAL WICHTIG - MARKDOWN-REGELN:
-- Verwende Nummerierung: 1., 2., 3. etc.
-- Verwende **fett** nur für die Feldnamen (Wort:, Wortart:, etc.)
-- Jedes Feld auf einer eigenen Zeile
-- Eine Leerzeile zwischen den Worteinträgen
-- KEINE Code-Blöcke (\`\`\`markdown)
-- Bearbeite JEDES Wort aus der untenstehenden Liste
-- Keine Wörter auslassen, ersetzen oder hinzufügen
-- Keine Einleitung, kein Kommentar, keine Erklärung
-- Starte sofort mit "1."
-
-HIER SIND DIE WÖRTER AUS DEM DOKUMENT:
-${vocabularyList}
-
-Beginne JETZT SOFORT mit der Nummerierung "1." - keine Einleitung!
-Antworte NUR in reinem Markdown (keine \`\`\`-Blöcke)!`;
-
-            return prompt;
+        // Update Preview
+        function updatePreview() {
+            const html = generateTicTacToe();
+            document.getElementById('preview').innerHTML = html;
+            document.getElementById('printView').innerHTML = html;
         }
-        
-        async function copyPrompt() {
-            const promptElement = document.getElementById('ai-prompt');
-            if (promptElement && promptElement.textContent) {
-                try {
-                    await navigator.clipboard.writeText(promptElement.textContent);
-                    showSuccess('Prompt kopiert! Fügen Sie ihn in ChatGPT oder Claude ein.');
-                } catch (err) {
-                    showError('Fehler beim Kopieren: ' + err);
-                }
-            } else {
-                showError('Kein Prompt zum Kopieren.');
-            }
-        }
-        
-        async function importFromAI() {
-            const aiResponseElement = document.getElementById('ai-response');
-            if (!aiResponseElement || !aiResponseElement.value.trim()) {
-                showError('Bitte fügen Sie die KI-Antwort ein.');
-                return;
-            }
-            try {
-                finalWords = parseMarkdownResponse(aiResponseElement.value.trim());
-                if (finalWords.length > 0) {
-                    renderWordsTable('final-words-tbody', finalWords, 'final-word-count');
-                    showSection('final-review-section');
-                    updateStepIndicator(6);
-                    showSuccess(`${finalWords.length} Vokabeln importiert und bereit zur Überprüfung!`);
-                } else {
-                    showError('Keine Vokabeln gefunden. Bitte überprüfen Sie das Markdown-Format.');
-                }
-            } catch (error) {
-                showError('Fehler beim Import: ' + (error.message || 'Unbekannter Fehler.'));
-            }
-        }
-        
-        async function exportToPDF() {
-            if (finalWords.length === 0) {
-                showError('Keine Vokabeln zum Export.');
-                return;
-            }
-            try {
-                if (typeof window.jspdf === 'undefined' || !window.jspdf.jsPDF) {
-                    throw new Error('jsPDF nicht geladen.');
-                }
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF('l', 'mm', 'a4');
-                const margin = 10;
-                const pageHeight = doc.internal.pageSize.height;
-                const defaultLineHeight = 5;
-                const cellPadding = 2;
-                const headerHeight = 10;
-                const titleHeight = 20;
-                const colWidths = {
-                    wort: 50,
-                    wortart: 25,
-                    definition: 70,
-                    example: 70,
-                    translation: targetLanguageName ? 40 : 0,
-                    eigene: 40
-                };
-                
-                doc.setFontSize(16);
-                const pdfTitle = targetGroupName ? `Vokabelliste ${targetGroupName}` : 'Vokabelliste';
-                doc.text(pdfTitle, margin, titleHeight);
-                
-                let y = titleHeight + 15;
-                const drawTableHeader = () => {
-                    doc.setFontSize(10);
-                    doc.setFont(undefined, 'bold');
-                    let x = margin;
-                    doc.rect(x, y, colWidths.wort, headerHeight);
-                    doc.text("Wort/Grammatik", x + cellPadding, y + headerHeight / 2 + 1);
-                    x += colWidths.wort;
-                    doc.rect(x, y, colWidths.wortart, headerHeight);
-                    doc.text("Wortart", x + cellPadding, y + headerHeight / 2 + 1);
-                    x += colWidths.wortart;
-                    doc.rect(x, y, colWidths.definition, headerHeight);
-                    doc.text("Erklärung", x + cellPadding, y + headerHeight / 2 + 1);
-                    x += colWidths.definition;
-                    doc.rect(x, y, colWidths.example, headerHeight);
-                    doc.text("Beispiel", x + cellPadding, y + headerHeight / 2 + 1);
-                    x += colWidths.example;
-                    if (targetLanguageName) {
-                        doc.rect(x, y, colWidths.translation, headerHeight);
-                        doc.text(`${targetLanguageName}`, x + cellPadding, y + headerHeight / 2 + 1);
-                        x += colWidths.translation;
-                    }
-                    doc.rect(x, y, colWidths.eigene, headerHeight);
-                    doc.text("Eigene", x + cellPadding, y + headerHeight / 2 + 1);
-                    y += headerHeight;
-                    doc.setFont(undefined, 'normal');
-                };
-                drawTableHeader();
-                for (const wordObj of finalWords) {
-                    const safeWord = wordObj.word || '';
-                    const safeWordType = wordObj.wordType || '';
-                    const safeDefinition = wordObj.definition || '';
-                    const safeExample = wordObj.example || '';
-                    const safeTranslation = wordObj.translation || '';
-                    const wordLines = doc.splitTextToSize(safeWord, colWidths.wort - 2 * cellPadding);
-                    const wordTypeLines = doc.splitTextToSize(safeWordType, colWidths.wortart - 2 * cellPadding);
-                    const defLines = doc.splitTextToSize(safeDefinition, colWidths.definition - 2 * cellPadding);
-                    const exampleLines = doc.splitTextToSize(safeExample, colWidths.example - 2 * cellPadding);
-                    const translationLines = targetLanguageName ? doc.splitTextToSize(safeTranslation, colWidths.translation - 2 * cellPadding) : [''];
-                    const maxLines = Math.max(
-                        wordLines.length,
-                        wordTypeLines.length,
-                        defLines.length,
-                        exampleLines.length,
-                        translationLines.length,
-                        1
-                    );
-                    const rowHeight = maxLines * defaultLineHeight + 2 * cellPadding;
-                    if (y + rowHeight > pageHeight - margin) {
-                        doc.addPage();
-                        y = margin;
-                        drawTableHeader();
-                    }
-                    let x = margin;
-                    doc.rect(x, y, colWidths.wort, rowHeight);
-                    doc.text(wordLines, x + cellPadding, y + cellPadding + defaultLineHeight - 1);
-                    x += colWidths.wort;
-                    doc.rect(x, y, colWidths.wortart, rowHeight);
-                    doc.text(wordTypeLines, x + cellPadding, y + cellPadding + defaultLineHeight - 1);
-                    x += colWidths.wortart;
-                    doc.rect(x, y, colWidths.definition, rowHeight);
-                    doc.text(defLines, x + cellPadding, y + cellPadding + defaultLineHeight - 1);
-                    x += colWidths.definition;
-                    doc.rect(x, y, colWidths.example, rowHeight);
-                    doc.text(exampleLines, x + cellPadding, y + cellPadding + defaultLineHeight - 1);
-                    x += colWidths.example;
-                    if (targetLanguageName) {
-                        doc.rect(x, y, colWidths.translation, rowHeight);
-                        doc.text(translationLines, x + cellPadding, y + cellPadding + defaultLineHeight - 1);
-                        x += colWidths.translation;
-                    }
-                    doc.rect(x, y, colWidths.eigene, rowHeight);
-                    y += rowHeight;
-                }
-                doc.output('dataurlnewwindow');
-                showSuccess('PDF erstellt!');
-            } catch (error) {
-                showError('PDF-Export Fehler: ' + (error.message || 'Unbekannter Fehler.'));
-            }
-        }
-        
-        async function exportToCSV() {
-            showError('CSV Export noch nicht implementiert.');
-        }
+        // Initialize
+        generateTaskEditors();
+        updatePreview();
     </script>
 </body>
 </html>
